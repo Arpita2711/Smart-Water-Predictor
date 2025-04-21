@@ -1,0 +1,48 @@
+version: "3.9"  # Compose file version
+
+services:
+  frontend:
+    build:
+      context: ..  # context is the root "DevOps Project" directory
+      dockerfile: DockerFolder/Dockerfile.frontend
+    container_name: frontend
+    ports:
+      - "80:80"        # Expose Nginx on host port 80
+    depends_on:
+      - backend        # Start backend before frontend
+    networks:
+      - fullstack_net
+    # Frontend is static; no env_file needed unless Nginx needs environment
+
+  backend:
+    build:
+      context: ..      # use project root as context (includes Backend code and DockerFolder)
+      dockerfile: DockerFolder/Dockerfile.backend
+    container_name: backend
+    env_file: 
+      - .env           # load AWS creds and PORT from DockerFolder/.env
+    depends_on:
+      - ml             # Ensure ML service is up before backend
+    networks:
+      - fullstack_net
+    # Optionally expose backend for direct access (e.g., for debugging):
+    # ports:
+    #   - "5000:5000"  # (Backend listens on PORT=5000 from .env)
+
+  ml:
+    build:
+      context: ..      # use project root as context (includes Backend code)
+      dockerfile: DockerFolder/Dockerfile.ml
+    container_name: ml
+    env_file: 
+      - .env           # (If ML service needs AWS or other env vars; e.g., not strictly needed here)
+    networks:
+      - fullstack_net
+    # Expose ML service port for internal use or debugging:
+    # ports:
+    #   - "5001:5001"  # Flask app listens on 5001 (as set in ml_model_api.py)
+
+# Define a custom network so containers can communicate by name
+networks:
+  fullstack_net:
+    driver: bridge

@@ -1,0 +1,9 @@
+# DockerFolder/Dockerfile.frontend
+
+FROM nginx:alpine
+
+# Copy Nginx config
+COPY DockerFolder/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy static frontend files
+COPY FrontENd/. /usr/share/nginx/html/
