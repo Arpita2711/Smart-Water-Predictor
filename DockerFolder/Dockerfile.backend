@@ -1,19 +1,12 @@
-# DockerFolder/Dockerfile.backend
-
 FROM node:16-alpine
 WORKDIR /app
 
-# Copy package files and install dependencies first (for layer caching)
-COPY Backend/package*.json /app/
+# Copy package files from root, where package.json actually is
+COPY package*.json /app/
 RUN npm install --only=production
 
-# Copy the rest of the backend code
+# Copy only backend code from Backend folder
 COPY Backend/. /app/
 
-# Ensure the .env file is in the image (if needed for build or default values; optional here)
-# COPY DockerFolder/.env /app/
-
-EXPOSE 5000  
-
-# Start the Node server
+EXPOSE 5000
 CMD ["node", "index.js"]
