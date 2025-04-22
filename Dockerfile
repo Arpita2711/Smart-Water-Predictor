@@ -36,7 +36,7 @@ COPY FrontENd ./FrontENd
 
 # Copy configs
 COPY render-config/nginx.conf /etc/nginx/conf.d/default.conf
-COPY render-config/supervisor.config /etc/supervisor/config.d/supervisor.config
+COPY render-config/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
 # Set environment variables (AWS, PORT, etc.)
 ENV PORT=5000
