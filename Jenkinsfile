@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Build Docker containers') {
             steps {
+                dir('DockerFolder') {
                 sh 'docker-compose build'
+                }
             }
         }
 
