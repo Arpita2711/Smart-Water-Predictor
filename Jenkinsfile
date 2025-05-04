@@ -10,10 +10,13 @@ pipeline {
             }
         }
 
-        stage('Deploy containers') {
-            steps {
-                dir('DockerFolder'){
-                sh 'docker-compose up -d'
+stage('Deploy containers') {
+    steps {
+        dir('DockerFolder') {
+            sh 'docker-compose down -v --remove-orphans || true'
+            sh 'docker-compose rm -f || true'
+            sh 'docker system prune -f || true'
+            sh 'docker-compose up -d'
                 }
             }
         }
