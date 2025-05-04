@@ -12,7 +12,9 @@ pipeline {
 
         stage('Deploy containers') {
             steps {
+                dir('DockerFolder'){
                 sh 'docker-compose up -d'
+                }
             }
         }
     }
